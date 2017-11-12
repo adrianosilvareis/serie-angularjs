@@ -1,4 +1,4 @@
-#SERIE ANGULARJS
+# SERIE ANGULARJS
 
 ## Aula 2
 Criação de um modulo e um controller e introdução ao MVC do angularJS
