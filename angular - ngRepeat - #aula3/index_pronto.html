@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="myApp">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Angular - ngRepeat</title>
+
+   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+
+   <style>
+      .col-md-4 + .col-md-4, {
+         padding: 0 !important;
+      }
+
+      .noPadding {
+         padding: 0 !important;
+      }
+
+      .preco {
+            background-color:#0055FF;
+            padding:0.5em;
+            font-size: 1.2em;
+            color:azure;
+            border-radius:0.5em;
+            float:right
+      }
+   </style>
+
+   <script src="lib/angular.js"></script>
+   <script src="lib/angular-locale_pt-br.js"></script>
+
+   <script>
+         //criação do novo modulo
+         angular.module('myApp', []);
+
+         angular.module('myApp')
+            .controller('myController', function($scope){
+
+                  $scope.conta = [];
+                  $scope.total = 0;
+
+                  $scope.titulos = {
+                        nomeEstabelecimento: "Restaurante do Juca",
+                        menu: 'Cardápio Especial',
+                        conta: 'Pedidos'
+                  };
+
+                  $scope.cardapio = [
+                        {_id: 1, nome: 'Comida 1', descricao: 'comida 1 bla bla sjsj', preco: 15.00},
+                        {_id: 2, nome: 'Comida 2', descricao: 'comida 2 bla comida japonesa', preco: 27.00},
+                        {_id: 3, nome: 'Comida 3', descricao: 'comida 3 carlos', preco: 13.00},
+                        {_id: 4, nome: 'Comida 4', descricao: 'comida 4 bla bla jose', preco: 12.99},
+                        {_id: 5, nome: 'Comida 5', descricao: 'comida 5 adriano sjsj', preco: 10.15}
+                  ];
+
+                  $scope.fazerPedido = function(item){
+                        //primeiro pedido
+                        if($scope.conta.length == 0) {
+                              $scope.conta = novoPedido($scope.conta, item)
+                        } else if(existeOPedido($scope.conta, item)) {
+                              $scope.conta = pedidoRepetido($scope.conta, item)
+                        } else{
+                              $scope.conta = novoPedido($scope.conta, item)
+                        }
+
+                        $scope.total = somarConta($scope.conta)
+                  }
+
+                  $scope.cancelarPedido = function(pedido) {
+                        $scope.conta = $scope.conta.filter((item) => {
+                              if(item._id == pedido._id){
+                                    if(item.quant != 1){
+                                          item.quant--
+                                          return item
+                                    }
+                                    return
+                              }
+                              return item
+                        })
+
+                        $scope.total = somarConta($scope.conta)
+                  }
+
+                  function somarConta(conta){
+                        let total = 0
+                        
+                        conta.map((item) => {
+                              total = total + item.quant*item.preco
+                        })
+
+                        return total
+                  }
+
+                  function pedidoRepetido(conta, item){
+                        conta.map((pedido) => {
+                              if(pedido._id == item._id){
+                                    pedido.quant++
+                                    return pedido
+                              }
+                              return pedido
+                        })
+
+                        return conta
+                  }
+
+                  function existeOPedido(conta, item){
+                        return conta.filter((pedido) => {
+                              if(pedido._id == item._id){
+                                    return true
+                              }
+                        }).length
+                  }
+
+                  function novoPedido(conta, item){
+                        let pedido = angular.copy(item);
+                        pedido.quant = 1;
+                        conta.push(pedido);
+                        return conta;
+                  }
+            })
+
+   </script>
+</head>
+<body ng-controller="myController">
+
+   <div class="section">
+      <div class="container">
+
+         <div class="jumbotron">
+            <h1>{{ titulos.nomeEstabelecimento }}</h1>
+         </div>
+
+         <div class="form-group">
+            <label for="search">Pesquisa</label>
+            <input type="text" class="form-control">
+         </div>
+
+         <div ng-class="{'col-md-8': conta.length > 0}">
+            <div class="row">
+               <h1>{{ titulos.menu }}</h1>
+               <hr>
+
+               <div class="col-md-4 noPadding" ng-repeat="item in cardapio">
+                  <div class="thumbnail">
+                     <img src="http://lorempixel.com/350/200/food/{{item._id}}" alt="{{item.nome}}">
+                     <div class="caption">
+                        <h3>{{item.nome}}</h3>
+                        <p>{{item.descricao}}</p>
+                        <span class="preco">
+                           {{item.preco | currency}}
+                        </span>
+                        <p>
+                           <a href="" class="btn btn-primary" role="button" ng-click="fazerPedido(item)">
+                              <i class="glyphicon glyphicon-shopping-cart"></i>
+                              Fazer pedido
+                           </a>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+         </div>
+
+         <div class="col-md-4" ng-if="conta.length != 0">
+            <h1>{{titulos.conta}}</h1>
+            <hr>
+            <div class="row" ng-repeat="pedido in conta">
+               <div class="col-md-8" >
+                  <a href="" class="close" ng-click="cancelarPedido(pedido)">
+                     <span aria-hidden="true">&times;</span>
+                  </a>
+                  <div class="thumbnail">
+                     <img src="http://lorempixel.com/350/200/food/{{pedido._id}}"  alt="{{pedido._id}}">
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <ul class="list-group">
+                     <li class="list-group-item">{{pedido.nome}}</li>
+                     <li class="list-group-item">Quant.: {{pedido.quant}}</li>
+                     <li class="list-group-item">{{pedido.preco | currency}}</li>
+                  </ul>
+               </div>
+               <hr>
+            </div>
+         </div>
+
+      </div>
+      <footer class="jumbotron">
+         <h4 class="text-center text-"><b>Total: {{total | currency}}</b></h1>
+            &copy; Adriano Reis
+      </footer>
+   </div>
+</body>
+</html>
