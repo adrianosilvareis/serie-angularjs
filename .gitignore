@@ -1,5 +1,6 @@
 /prep/
 */node_modules
+*/public/lib
 */yarn.lock
 angular - ngRepeat - #aula3/backup.html
 angular - ngRepeat - #aula3/index_text.html
