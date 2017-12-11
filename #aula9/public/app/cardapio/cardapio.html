@@ -1,0 +1,79 @@
+<div class="container">
+
+  <div class="jumbotron">
+    <h1>{{ titulos.nomeEstabelecimento | camelcase }}</h1>
+  </div>
+
+  <div class="col-md-12">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="search">Pesquisa</label>
+        <input type="text" class="form-control" ng-model="search">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="limit">Limite</label>
+        <select name="limit" id="limit" class="form-control" ng-model="limite">
+          <option value="">Selecione o limite de item filtrados</option>
+          <option value="1">1 Itens</option>
+          <option value="3">3 Itens</option>
+          <option value="5">5 Itens</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div ng-class="{'col-md-8': conta.length > 0}">
+    <div class="row">
+      <h1>{{ titulos.menu }}</h1>
+      <hr>
+
+      <div class="col-md-4 noPadding" ng-repeat="item in cardapio | limitTo: limite | filter: search">
+        <div class="thumbnail">
+          <img src="http://lorempixel.com/350/200/food/{{item._id}}" alt="{{item.nome}}">
+          <div class="caption">
+            <h3>{{item.nome}}</h3>
+            <p>{{item.descricao}}</p>
+            <span class="preco">
+              {{item.preco | currency}}
+            </span>
+            <p>
+              <a href="" class="btn btn-primary" role="button" ng-click="fazerPedido(item)">
+                <i class="glyphicon glyphicon-shopping-cart"></i>
+                Fazer pedido
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-md-4" ng-if="conta.length != 0">
+    <h1>{{titulos.conta}}</h1>
+    <hr>
+    <div class="row" ng-repeat="pedido in conta">
+      <div class="col-md-8">
+        <a href="" class="close" ng-click="cancelarPedido(pedido)">
+          <span aria-hidden="true">&times;</span>
+        </a>
+        <div class="thumbnail">
+          <img src="http://lorempixel.com/350/200/food/{{pedido._id}}" alt="{{pedido._id}}">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <ul class="list-group">
+          <li class="list-group-item">{{pedido.nome}}</li>
+          <li class="list-group-item">Quant.: {{pedido.quant}}</li>
+          <li class="list-group-item">{{pedido.preco | currency}}</li>
+        </ul>
+      </div>
+      <hr>
+    </div>
+  </div>
+  
+</div>
+
+<div ng-include="'app/cardapio/footer.html'"></div>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="app">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Angular - ngRepeat</title>
+
+   <!-- bibliotecas externas -->
+   <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
+   
+   <script src="lib/angular/angular.min.js"></script>
+   <script src="lib/angular-route/angular-route.min.js"></script>
+   <script src="lib/angular-locale-pt-br/angular-locale_pt-br.js"></script>
+   <script src="lib/jquery/dist/jquery.min.js"></script>
+
+   <!-- nosso app -->
+   <script src="app/app.js"></script>
+
+   <!-- cardapio -->
+   <link rel="stylesheet" href="app/cardapio/cardapio.css">
+   <script src="app/cardapio/cardapio.module.js"></script>
+   <script src="app/cardapio/cardapio.controller.js"></script>
+   <script src="app/cardapio/cardapio.filter.js"></script>
+   <script src="app/cardapio/route.config.js"></script>
+
+   <!-- home -->
+   <script src="app/home/home.module.js"></script>
+   <script src="app/home/home.controller.js"></script>
+   <script src="app/home/home.config.js"></script>
+</head>
+
+<body>
+  <div class="section">
+
+    <div ng-view></div>
+
+  </div>
+</body>
+
+</html>
